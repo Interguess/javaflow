@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+implementation 'org.projectlombok:lombok:1.18.30'
+    implementation 'org.jetbrains:annotations:24.0.0'
+
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+}
