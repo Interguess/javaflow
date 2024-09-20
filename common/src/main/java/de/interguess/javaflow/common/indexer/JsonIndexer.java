@@ -25,9 +25,9 @@ public class JsonIndexer implements WorkflowIndexer {
 
     /**
      * Indexes a workflow from a JSON string.
-     *
-     * @param workflow JSON string representation of the workflow
-     * @return WorkflowIndex object representing the parsed workflow
+     * <p/>
+     * @param workflow The JSON string representation of the workflow
+     * @return Returns the parsed {@link WorkflowIndex} from the json
      */
     @Override @NotNull
     public WorkflowIndex index(@NotNull String workflow) {
@@ -36,19 +36,19 @@ public class JsonIndexer implements WorkflowIndexer {
     }
 
     /**
-     * Indexes a workflow from a JsonObject.
-     *
-     * @param json JsonObject representing the workflow
-     * @return WorkflowIndex object
+     * Indexes a workflow from a json object.
+     * <p/>
+     * @param json The {@link JsonObject} representing the workflow
+     * @return Returns the {@link WorkflowIndex} object
      */
     private WorkflowIndex indexWorkflow(@NotNull JsonObject json) {
         final String name = NullUtil.defaultIfNull(json.has("name") ? json.get("name").getAsString() : null, "Unnamed Workflow");
 
         // Parse variables
-        final Map<String, Object> variables = parseVariables(json);
+        final Map<String, Object> variables = this.parseVariables(json);
 
         // Parse triggers
-        final List<TriggerIndex> triggers = parseTriggers(json);
+        final List<TriggerIndex> triggers = this.parseTriggers(json);
 
         // Build and return the WorkflowIndex
         return WorkflowIndex.builder()
@@ -79,14 +79,14 @@ public class JsonIndexer implements WorkflowIndexer {
      * Parses triggers from the workflow JSON.
      * <p/>
      * @param json The {@link JsonObject} representing the workflow
-     * @return List of {@link JsonObject} objects
+     * @return Returns a list of {@link JsonObject} objects
      */
     private List<TriggerIndex> parseTriggers(JsonObject json) {
         final List<TriggerIndex> triggers = new ArrayList<>();
         if (json.has("triggers")) {
             JsonArray triggersJson = json.getAsJsonArray("triggers");
             for (JsonElement triggerElement : triggersJson) {
-                triggers.add(indexTrigger(triggerElement.getAsJsonObject()));
+                triggers.add(this.indexTrigger(triggerElement.getAsJsonObject()));
             }
         }
         return triggers;
@@ -107,7 +107,7 @@ public class JsonIndexer implements WorkflowIndexer {
         if (json.has("tasks")) {
             JsonArray tasksJson = json.getAsJsonArray("tasks");
             for (JsonElement taskElement : tasksJson) {
-                tasks.add(indexExecutableElement(taskElement.getAsJsonObject()));
+                tasks.add(this.indexExecutableElement(taskElement.getAsJsonObject()));
             }
         }
 
@@ -120,9 +120,9 @@ public class JsonIndexer implements WorkflowIndexer {
 
     /**
      * Indexes an executable element (Router, Loop, or Procedure) from a JsonObject.
-     *
+     * <p/>
      * @param json JsonObject representing the executable element
-     * @return {@link ExecutableIndex} object (RouterIndex, LoopIndex, or ProcedureIndex)
+     * @return Returns the {@link ExecutableIndex} object (RouterIndex, LoopIndex, or ProcedureIndex)
      */
     @NotNull
     private ExecutableIndex indexExecutableElement(@NotNull JsonObject json) {
@@ -130,19 +130,19 @@ public class JsonIndexer implements WorkflowIndexer {
         final String type = json.get("type").getAsString();
 
         return switch (type) {
-            case "router" -> indexRouter(json, id, type);
-            case "loop" -> indexLoop(json, id, type);
-            default -> indexProcedure(json, id, type);
+            case "router" -> this.indexRouter(json, id, type);
+            case "loop" -> this.indexLoop(json, id, type);
+            default -> this.indexProcedure(json, id, type);
         };
     }
 
     /**
      * Indexes a router executable element.
-     *
-     * @param json JsonObject representing the router
-     * @param id Router ID
-     * @param type Router type
-     * @return RouterIndex object
+     * <p/>
+     * @param json The {@link JsonObject} representing the router
+     * @param id The router id
+     * @param type The router type
+     * @return Returns the {@link RouterIndex} object
      */
     @NotNull
     private RouterIndex indexRouter(@NotNull JsonObject json, @NotNull String id, @NotNull String type) {
@@ -151,9 +151,8 @@ public class JsonIndexer implements WorkflowIndexer {
         for (Map.Entry<String, JsonElement> entry : routesJson.entrySet()) {
             List<ExecutableIndex> routeTasks = new ArrayList<>();
             JsonArray routeTasksJson = entry.getValue().getAsJsonArray();
-            for (JsonElement taskElement : routeTasksJson) {
-                routeTasks.add(indexExecutableElement(taskElement.getAsJsonObject()));
-            }
+            for (JsonElement taskElement : routeTasksJson)
+                routeTasks.add(this.indexExecutableElement(taskElement.getAsJsonObject()));
             routes.put(entry.getKey(), routeTasks);
         }
 
@@ -169,21 +168,20 @@ public class JsonIndexer implements WorkflowIndexer {
 
     /**
      * Indexes a loop executable element.
-     *
-     * @param json JsonObject representing the loop
-     * @param id Loop ID
-     * @param type Loop type
-     * @return LoopIndex object
+     * <p/>
+     * @param json The {@link JsonObject} representing the loop
+     * @param id The loop id
+     * @param type The loop type
+     * @return Returns the {@link LoopIndex}
      */
     @NotNull
     private LoopIndex indexLoop(@NotNull JsonObject json, @NotNull String id, @NotNull String type) {
-        final ProcedureIndex condition = (ProcedureIndex) indexExecutableElement(json.getAsJsonObject("condition"));
+        final ProcedureIndex condition = (ProcedureIndex) this.indexExecutableElement(json.getAsJsonObject("condition"));
 
         final List<ExecutableIndex> tasks = new ArrayList<>();
         JsonArray tasksJson = json.getAsJsonArray("tasks");
-        for (JsonElement taskElement : tasksJson) {
-            tasks.add(indexExecutableElement(taskElement.getAsJsonObject()));
-        }
+        for (JsonElement taskElement : tasksJson)
+            tasks.add(this.indexExecutableElement(taskElement.getAsJsonObject()));
 
         return LoopIndex.builder()
                 .id(id)
@@ -195,19 +193,18 @@ public class JsonIndexer implements WorkflowIndexer {
 
     /**
      * Indexes a procedure executable element.
-     *
-     * @param json JsonObject representing the procedure
-     * @param id Procedure ID
-     * @param type Procedure type
-     * @return ProcedureIndex object
+     * <p/>
+     * @param json The {@link JsonObject} representing the procedure
+     * @param id The procedure id
+     * @param type The procedure type
+     * @return The {@link ProcedureIndex} object
      */
     @NotNull
     private ProcedureIndex indexProcedure(@NotNull JsonObject json, @NotNull String id, @NotNull String type) {
         final MultiInput.Builder input = MultiInput.create();
         JsonObject inputJson = json.getAsJsonObject("input");
-        for (Map.Entry<String, JsonElement> entry : inputJson.entrySet()) {
+        for (Map.Entry<String, JsonElement> entry : inputJson.entrySet())
             input.with(entry.getKey(), gson.fromJson(entry.getValue(), Object.class));
-        }
 
         return ProcedureIndex.builder()
                 .id(id)
