@@ -16,7 +16,7 @@ public class ObjectSchemaProvider implements SchemaProvider<Object> {
         final JsonArray schema = new JsonArray();
 
         objects.forEach(object -> {
-            final JsonObject dtoSchema = new JsonObject();
+            final JsonObject objectSchema = new JsonObject();
 
             final JsonArray fields = new JsonArray();
 
@@ -41,10 +41,10 @@ public class ObjectSchemaProvider implements SchemaProvider<Object> {
                 fields.add(fieldSchema);
             });
 
-            dtoSchema.addProperty("name", String.format("$%s", dtoClass.getSimpleName()));
-            dtoSchema.add("fields", fields);
+            objectSchema.addProperty("name", String.format("$%s", dtoClass.getSimpleName()));
+            objectSchema.add("fields", fields);
 
-            schema.add(dtoSchema);
+            schema.add(objectSchema);
         });
 
         return schema.toString();
