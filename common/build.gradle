@@ -13,7 +13,7 @@ repositories {
 dependencies {
     implementation project(':api')
     
-    implementation 'com.google.code.gson:gson:2.8.8'
+    implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'com.google.inject:guice:7.0.0'
     implementation 'com.github.Carleslc.Simple-YAML:Simple-Yaml:1.8.4'
     
