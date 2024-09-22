@@ -88,7 +88,8 @@ public class JsonIndexer implements WorkflowIndexer {
      * @param json The {@link JsonObject} representing the workflow
      * @return Returns a list of {@link JsonObject} objects
      */
-    private List<TriggerIndex> parseTriggers(JsonObject json) {
+    @NotNull
+    private List<TriggerIndex> parseTriggers(@NotNull  JsonObject json) {
         final List<TriggerIndex> triggers = new ArrayList<>();
         if (json.has("triggers")) {
             JsonArray triggersJson = json.getAsJsonArray("triggers");
