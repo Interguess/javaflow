@@ -10,7 +10,7 @@ A robust Java framework specifically designed to efficiently execute a wide rang
 ```groovy
 repositories {
     maven {
-        url 'https://repo.interguess.de/maven-public'
+        url 'https://maven.pkg.github.com/interguess/javaflow'
     }
 }
 ```
@@ -25,9 +25,9 @@ dependencies {
 ```xml
 <repositories>
     <repository>
-        <id>interguess-public</id>
-        <name>Interguess Maven public repository</name>
-        <url>https://repo.interguess.de/maven-public</url>
+        <id>github-packages</id>
+        <name>Github Packages for javaflow repository</name>
+        <url>https://maven.pkg.github.com/interguess/javaflow</url>
     </repository>
 </repositories>
 ```
