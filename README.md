@@ -25,7 +25,7 @@ dependencies {
 ```xml
 <repositories>
     <repository>
-        <id>github-packages</id>
+        <id>javaflow-github-packages</id>
         <name>Github Packages for javaflow repository</name>
         <url>https://maven.pkg.github.com/interguess/javaflow</url>
     </repository>
