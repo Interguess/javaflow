@@ -13,14 +13,14 @@ repositories {
 dependencies {
     implementation project(':api')
     
-    implementation 'com.google.code.gson:gson:2.8.8'
+    implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'com.google.inject:guice:7.0.0'
     implementation 'com.github.Carleslc.Simple-YAML:Simple-Yaml:1.8.4'
     
     compileOnly 'org.jetbrains:annotations:24.1.0'
-    compileOnly 'org.projectlombok:lombok:1.18.30'
+    compileOnly 'org.projectlombok:lombok:1.18.34'
     
-    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation platform('org.junit:junit-bom:5.11.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
