@@ -118,5 +118,4 @@ class JsonIndexationTest {
         assertEquals("${ 57aec617.player }", sendPlayerMessageTask.getInput().getValues().get("player"), "Player input should reference trigger player");
         assertEquals("Du hast jetzt ${ 0a396db0.result }€!", sendPlayerMessageTask.getInput().getValues().get("message"), "Message content should match");
     }
-
 }
