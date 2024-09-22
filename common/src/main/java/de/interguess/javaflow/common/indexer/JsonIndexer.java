@@ -1,6 +1,7 @@
 package de.interguess.javaflow.common.indexer;
 
 import com.google.gson.*;
+import de.interguess.javaflow.api.exception.WorkflowLoadException;
 import de.interguess.javaflow.api.index.ExecutableIndex;
 import de.interguess.javaflow.api.index.TriggerIndex;
 import de.interguess.javaflow.api.index.WorkflowIndex;
@@ -31,8 +32,13 @@ public class JsonIndexer implements WorkflowIndexer {
      */
     @Override @NotNull
     public WorkflowIndex index(@NotNull String workflow) {
-        JsonObject jsonObject = JsonParser.parseString(workflow).getAsJsonObject();
-        return indexWorkflow(jsonObject);
+        try {
+            JsonObject jsonObject = JsonParser.parseString(workflow).getAsJsonObject();
+            return this.indexWorkflow(jsonObject);
+        } catch (JsonSyntaxException exception) {
+            // File contains invalid json syntax
+            throw new WorkflowLoadException("Error parsing syntax of workflow", exception);
+        }
     }
 
     /**
@@ -41,6 +47,7 @@ public class JsonIndexer implements WorkflowIndexer {
      * @param json The {@link JsonObject} representing the workflow
      * @return Returns the {@link WorkflowIndex} object
      */
+    @NotNull
     private WorkflowIndex indexWorkflow(@NotNull JsonObject json) {
         final String name = NullUtil.defaultIfNull(json.has("name") ? json.get("name").getAsString() : null, "Unnamed Workflow");
 
@@ -60,7 +67,7 @@ public class JsonIndexer implements WorkflowIndexer {
 
     /**
      * Parses variables from the workflow JSON.
-     *
+     * <p/>
      * @param json The {@link JsonObject} representing the workflow
      * @return Map of variable names to their values
      */

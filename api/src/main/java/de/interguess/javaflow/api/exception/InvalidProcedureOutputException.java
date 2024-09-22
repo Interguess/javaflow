@@ -1,8 +1,6 @@
 package de.interguess.javaflow.api.exception;
 
-public class InvalidProcedureOutputException extends RuntimeException {
+import lombok.experimental.StandardException;
 
-    public InvalidProcedureOutputException(String message) {
-        super(message);
-    }
-}
+@StandardException
+public class InvalidProcedureOutputException extends RuntimeException {}

@@ -1,8 +1,6 @@
 package de.interguess.javaflow.api.exception;
 
-public class TriggerIndexingException extends RuntimeException {
+import lombok.experimental.StandardException;
 
-    public TriggerIndexingException(String message) {
-        super(message);
-    }
-}
+@StandardException
+public class TriggerIndexingException extends RuntimeException {}

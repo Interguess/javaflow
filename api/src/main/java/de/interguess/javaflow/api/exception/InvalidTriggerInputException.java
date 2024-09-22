@@ -1,8 +1,6 @@
 package de.interguess.javaflow.api.exception;
 
-public class InvalidTriggerInputException extends RuntimeException {
+import lombok.experimental.StandardException;
 
-    public InvalidTriggerInputException(String message) {
-        super(message);
-    }
-}
+@StandardException
+public class InvalidTriggerInputException extends RuntimeException { }
