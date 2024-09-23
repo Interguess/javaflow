@@ -65,9 +65,13 @@ class ClassSearchTest {
         try (var mockedStatic = mockStatic(ClassPath.class)) {
             mockedStatic.when(() -> ClassPath.from(mockClassLoader)).thenThrow(new IOException());
 
-            List<Class<?>> result = ClassSearcherUtil.listAllClasses(mockClassLoader, "com.example.package");
-            assertNotNull(result);
-            assertTrue(result.isEmpty());
+            try {
+                ClassSearcherUtil.listAllClasses(mockClassLoader, "com.example.package");
+
+                fail("Expected RuntimeException");
+            } catch (Exception ignored) {
+
+            }
         }
     }
 }
