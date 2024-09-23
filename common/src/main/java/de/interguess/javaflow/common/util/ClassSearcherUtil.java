@@ -12,8 +12,8 @@ import java.util.List;
 @UtilityClass
 public class ClassSearcherUtil {
 
-    @SuppressWarnings("all") /// Supress {@link com.google.common.annotations.Beta}
     @NotNull
+    @SuppressWarnings("UnstableApiUsage")
     public static List<Class<?>> listAllClasses(@NotNull ClassLoader classLoader, @NotNull String packageName) {
         try {
             ClassPath classPath = ClassPath.from(classLoader);
@@ -23,9 +23,7 @@ public class ClassSearcherUtil {
                     .map(ClassPath.ClassInfo::load)
                     .collect(ImmutableList.toImmutableList());
         } catch (IOException exception) {
-            exception.printStackTrace();
-            return ImmutableList.of();
+            throw new RuntimeException("Failed to list all classes", exception);
         }
     }
-
 }

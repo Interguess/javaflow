@@ -1,4 +1,5 @@
 package de.interguess.javaflow.test;
+
 import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.ClassPath;
 import de.interguess.javaflow.common.util.ClassSearcherUtil;
@@ -37,7 +38,6 @@ class ClassSearchTest {
 
         when(mockClassPath.getTopLevelClassesRecursive(anyString()))
                 .thenReturn(ImmutableSet.of(mockClassInfo1, mockClassInfo2));
-
     }
 
     @Test
@@ -70,5 +70,4 @@ class ClassSearchTest {
             assertTrue(result.isEmpty());
         }
     }
-
 }
