@@ -14,7 +14,7 @@ public class ClassSearcherUtil {
 
     @SuppressWarnings("all") /// Supress {@link com.google.common.annotations.Beta}
     @NotNull
-    public List<Class<?>> listAllClasses(@NotNull ClassLoader classLoader, @NotNull String packageName) {
+    public static List<Class<?>> listAllClasses(@NotNull ClassLoader classLoader, @NotNull String packageName) {
         try {
             ClassPath classPath = ClassPath.from(classLoader);
             ImmutableList<ClassPath.ClassInfo> classInfos = classPath.getTopLevelClassesRecursive(packageName).asList();

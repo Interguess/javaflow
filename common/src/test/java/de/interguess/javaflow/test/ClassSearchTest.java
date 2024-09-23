@@ -38,9 +38,6 @@ class ClassSearchTest {
         when(mockClassPath.getTopLevelClassesRecursive(anyString()))
                 .thenReturn(ImmutableSet.of(mockClassInfo1, mockClassInfo2));
 
-        try (var mockedStatic = mockStatic(ClassPath.class)) {
-            mockedStatic.when(() -> ClassPath.from(mockClassLoader)).thenReturn(mockClassPath);
-        }
     }
 
     @Test
