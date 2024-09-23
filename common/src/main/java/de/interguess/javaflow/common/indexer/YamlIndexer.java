@@ -38,18 +38,18 @@ public class YamlIndexer implements WorkflowIndexer {
         final ConfigurationSection variablesSection = section.getConfigurationSection("variables");
 
         if (variablesSection != null) {
-            variablesSection.getKeys(false).forEach(key -> {
+            for (String key : variablesSection.getKeys(false)) {
                 variables.put(key, variablesSection.get(key));
-            });
+            }
         }
 
         final List<TriggerIndex> triggers = new ArrayList<>();
 
-        section.getList("triggers").forEach(triggerElement -> {
-            ConfigurationSection triggerSection = new YamlConfiguration().createSection("section", (Map<?, ?>) triggerElement);
+        for (Object triggerElement : section.getList("triggers")) {
+            final ConfigurationSection triggerSection = new YamlConfiguration().createSection("section", (Map<?, ?>) triggerElement);
 
             triggers.add(indexTrigger(triggerSection));
-        });
+        }
 
         return WorkflowIndex.builder()
                 .name(name)
@@ -62,18 +62,10 @@ public class YamlIndexer implements WorkflowIndexer {
         final String id = section.getString("id");
         final String type = section.getString("type");
 
-        final List<ExecutableIndex> tasks = new ArrayList<>();
-
-        section.getList("tasks").forEach(task -> {
-            final ConfigurationSection taskSection = new YamlConfiguration().createSection("section", (Map<?, ?>) task);
-
-            tasks.add(indexExecutableElement(taskSection));
-        });
-
         return TriggerIndex.builder()
                 .id(id)
                 .type(type)
-                .tasks(tasks)
+                .tasks(indexExecutableIndexList(section, "tasks"))
                 .build();
     }
 
@@ -86,17 +78,9 @@ public class YamlIndexer implements WorkflowIndexer {
 
             final ConfigurationSection routesSection = section.getConfigurationSection("routes");
 
-            routesSection.getKeys(false).forEach(key -> {
-                final List<ExecutableIndex> tasks = new ArrayList<>();
-
-                routesSection.getList(key).forEach(taskElement -> {
-                    ConfigurationSection taskSection = new YamlConfiguration().createSection("section", (Map<?, ?>) taskElement);
-
-                    tasks.add(indexExecutableElement(taskSection));
-                });
-
-                routes.put(key, tasks);
-            });
+            for (final String key : routesSection.getKeys(false)) {
+                routes.put(key, indexExecutableIndexList(routesSection, key));
+            }
 
             final Object inputObject = section.get("input");
 
@@ -109,28 +93,20 @@ public class YamlIndexer implements WorkflowIndexer {
         } else if (type.equals("loop")) {
             final ProcedureIndex condition = (ProcedureIndex) indexExecutableElement(section.getConfigurationSection("condition")); //todo: throw exception if type mismatch
 
-            final List<ExecutableIndex> tasks = new ArrayList<>();
-
-            section.getList("tasks").forEach(taskElement -> {
-                ConfigurationSection taskSection = new YamlConfiguration().createSection("section", (Map<?, ?>) taskElement);
-
-                tasks.add(indexExecutableElement(taskSection));
-            });
-
             return LoopIndex.builder()
                     .id(id)
                     .type(type)
                     .condition(condition)
-                    .tasks(tasks)
+                    .tasks(indexExecutableIndexList(section, "tasks"))
                     .build();
         } else {
             final MultiInput.Builder input = MultiInput.create();
 
             final ConfigurationSection inputSection = section.getConfigurationSection("input");
 
-            inputSection.getKeys(false).forEach(key -> {
+            for (final String key : inputSection.getKeys(false)) {
                 input.with(key, inputSection.get(key));
-            });
+            }
 
             return ProcedureIndex.builder()
                     .id(id)
@@ -138,5 +114,17 @@ public class YamlIndexer implements WorkflowIndexer {
                     .input(input)
                     .build();
         }
+    }
+
+    private List<ExecutableIndex> indexExecutableIndexList(ConfigurationSection section, String sectionKey) {
+        final List<ExecutableIndex> tasks = new ArrayList<>();
+
+        for (final Object task : section.getList(sectionKey)) {
+            final ConfigurationSection taskSection = new YamlConfiguration().createSection("section", (Map<?, ?>) task);
+
+            tasks.add(indexExecutableElement(taskSection));
+        }
+
+        return tasks;
     }
 }

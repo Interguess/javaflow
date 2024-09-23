@@ -17,10 +17,12 @@ import de.interguess.javaflow.api.workflow.Workflow;
 import de.interguess.javaflow.api.workflow.WorkflowProvider;
 import de.interguess.javaflow.common.ReferenceResolver;
 import de.interguess.javaflow.common.util.ClassSearcherUtil;
+import de.interguess.javaflow.common.util.GsonUtil;
 import de.interguess.javaflow.common.workflow.WorkflowImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -100,10 +102,17 @@ public class TriggerProviderImpl extends TriggerProvider {
 
                 final MultiOutput output = procedure.execute(workflow, procedureIndex.getInput());
 
-                //todo: set vars
-                //workflow.setVariable();
+                if (output != null) {
+                    final Map<String, Serializable> outputMap = GsonUtil.deepJsonToMap(new HashMap<>(), output.getValues());
 
-                return output;
+                    for (Map.Entry<String, Serializable> entry : outputMap.entrySet()) {
+                        workflow.setVariable(entry.getKey(), entry.getValue());
+                    }
+
+                    return output;
+                }
+
+                return null;
             }
 
             case RouterIndex routerIndex -> {
