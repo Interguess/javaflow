@@ -30,7 +30,7 @@ class ClassSearchTest {
     private ClassPath.ClassInfo mockClassInfo2;
 
     @BeforeEach
-    void mock() throws Exception {
+    void mock() {
         MockitoAnnotations.openMocks(this);
 
         doReturn(String.class).when(mockClassInfo1).load();
@@ -41,7 +41,7 @@ class ClassSearchTest {
     }
 
     @Test
-    void testSuccess() throws Exception {
+    void testSuccess() {
         // Test for successful class loading
         try (var mockedStatic = mockStatic(ClassPath.class)) {
             mockedStatic.when(() -> ClassPath.from(mockClassLoader)).thenReturn(mockClassPath);
@@ -60,7 +60,7 @@ class ClassSearchTest {
     }
 
     @Test
-    void testException() throws Exception {
+    void testException() {
         // Simulate IOException in ClassPath
         try (var mockedStatic = mockStatic(ClassPath.class)) {
             mockedStatic.when(() -> ClassPath.from(mockClassLoader)).thenThrow(new IOException());
