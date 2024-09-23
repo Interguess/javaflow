@@ -17,16 +17,16 @@ public class TriggerSchemaProvider implements SchemaProvider<Trigger> {
         JsonArray schema = new JsonArray();
 
         triggers.forEach(function -> {
-            final JsonObject conditionSchema = new JsonObject();
+            final JsonObject triggerSchema = new JsonObject();
 
             final CustomTrigger customTrigger = function.getClass().getAnnotation(CustomTrigger.class);
 
             if (customTrigger == null) {
-                throw new IllegalArgumentException("Function must be annotated with @CustomTrigger");
+                throw new IllegalArgumentException("Trigger must be annotated with @CustomTrigger");
             }
 
-            conditionSchema.addProperty("id", customTrigger.id());
-            conditionSchema.addProperty("description", customTrigger.description());
+            triggerSchema.addProperty("id", customTrigger.id());
+            triggerSchema.addProperty("description", customTrigger.description());
 
             final JsonObject inputSchema = new JsonObject();
 
@@ -40,9 +40,9 @@ public class TriggerSchemaProvider implements SchemaProvider<Trigger> {
                 inputSchema.add(field.name(), fieldSchema);
             });
 
-            conditionSchema.add("input", inputSchema);
+            triggerSchema.add("input", inputSchema);
 
-            schema.add(conditionSchema);
+            schema.add(triggerSchema);
         });
 
         return schema.toString();

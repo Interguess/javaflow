@@ -17,16 +17,16 @@ public class ProcedureSchemaProvider implements SchemaProvider<Procedure> {
         final JsonArray schema = new JsonArray();
 
         procedures.forEach(function -> {
-            final JsonObject conditionSchema = new JsonObject();
+            final JsonObject procedureSchema = new JsonObject();
 
             final CustomProcedure customProcedure = function.getClass().getAnnotation(CustomProcedure.class);
 
             if (customProcedure == null) {
-                throw new IllegalArgumentException("Function must be annotated with @CustomProcedure");
+                throw new IllegalArgumentException("Procedure must be annotated with @CustomProcedure");
             }
 
-            conditionSchema.addProperty("id", customProcedure.id());
-            conditionSchema.addProperty("description", customProcedure.description());
+            procedureSchema.addProperty("id", customProcedure.id());
+            procedureSchema.addProperty("description", customProcedure.description());
 
             final JsonObject inputSchema = new JsonObject();
 
@@ -40,7 +40,7 @@ public class ProcedureSchemaProvider implements SchemaProvider<Procedure> {
                 inputSchema.add(field.name(), fieldSchema);
             });
 
-            conditionSchema.add("input", inputSchema);
+            procedureSchema.add("input", inputSchema);
 
             if (customProcedure.output() != null) {
                 final JsonObject outputSchema = new JsonObject();
@@ -55,10 +55,10 @@ public class ProcedureSchemaProvider implements SchemaProvider<Procedure> {
                     outputSchema.add(field.name(), fieldSchema);
                 });
 
-                conditionSchema.add("output", outputSchema);
+                procedureSchema.add("output", outputSchema);
             }
 
-            schema.add(conditionSchema);
+            schema.add(procedureSchema);
         });
 
         return schema.toString();
