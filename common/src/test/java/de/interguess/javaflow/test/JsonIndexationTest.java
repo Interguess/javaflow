@@ -93,7 +93,7 @@ class JsonIndexationTest {
         List<ExecutableIndex> falseRoute = ((RouterIndex) indexedWorkflow.getTriggers().getFirst().getTasks().get(2)).getRoutes().get("false");
         assertEquals(3, falseRoute.size(), "False route should have three tasks");
 
-        testAddNumbersTask((ProcedureIndex) falseRoute.get(0));
+        testAddNumbersTask((ProcedureIndex) falseRoute.getFirst());
         testSetPlayerMoneyTask((ProcedureIndex) falseRoute.get(1));
         testSendPlayerMessageTask((ProcedureIndex) falseRoute.get(2));
     }
@@ -105,14 +105,14 @@ class JsonIndexationTest {
         assertEquals(1000.0, addNumbersTask.getInput().getValues().get("second"), "Second input should be 1000");
     }
 
-    private void testSetPlayerMoneyTask(ProcedureIndex setPlayerMoneyTask) {
+    private void testSetPlayerMoneyTask(@NotNull ProcedureIndex setPlayerMoneyTask) {
         assertEquals("18338bb1", setPlayerMoneyTask.getId(), "setPlayerMoney task ID should match");
         assertEquals("setPlayerMoney", setPlayerMoneyTask.getType(), "Task type should be 'setPlayerMoney'");
         assertEquals("${ 57aec617.player }", setPlayerMoneyTask.getInput().getValues().get("player"), "Player input should reference trigger player");
         assertEquals("${ 0a396db0.result }", setPlayerMoneyTask.getInput().getValues().get("amount"), "Amount input should reference addNumbers result");
     }
 
-    private void testSendPlayerMessageTask(ProcedureIndex sendPlayerMessageTask) {
+    private void testSendPlayerMessageTask(@NotNull ProcedureIndex sendPlayerMessageTask) {
         assertEquals("b3cd9b82", sendPlayerMessageTask.getId(), "sendPlayerMessage task ID should match");
         assertEquals("sendPlayerMessage", sendPlayerMessageTask.getType(), "Task type should be 'sendPlayerMessage'");
         assertEquals("${ 57aec617.player }", sendPlayerMessageTask.getInput().getValues().get("player"), "Player input should reference trigger player");
