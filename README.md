@@ -1,6 +1,6 @@
 # Javaflow Framework
 
-![Interguess Javaflow](https://github.com/user-attachments/assets/e1c739e2-6a52-41c4-9fd1-4a4e9febd33e)
+![image](https://github.com/user-attachments/assets/200c2189-6bd3-4795-b02a-fdb32386329c)
 
 A robust Java framework specifically designed to efficiently execute a wide range of tasks based on different conditions or triggers, providing seamless integration with AI systems. It has an advanced, automated schema generation process that simplifies the configuration of complex workflows. This framework is ideal for projects that require dynamic decision making, machine learning capabilities and automation of intelligent processes in different environments.
 
