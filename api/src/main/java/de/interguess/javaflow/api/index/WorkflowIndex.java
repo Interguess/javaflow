@@ -8,15 +8,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Map;
 
-@Getter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor(force = true)
-public class WorkflowIndex extends Index {
-
-    private final String name;
-
-    private final Map<String, Object> variables;
-
-    private final List<TriggerIndex> triggers;
-}
+public record WorkflowIndex(
+        String name,
+        Map<String, Object> variables,
+        List<TriggerIndex> triggers
+) implements Index {}

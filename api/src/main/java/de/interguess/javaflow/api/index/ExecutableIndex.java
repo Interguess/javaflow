@@ -1,4 +1,3 @@
 package de.interguess.javaflow.api.index;
 
-public class ExecutableIndex extends Index {
-}
+public non-sealed interface ExecutableIndex extends Index {}
