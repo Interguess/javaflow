@@ -1,4 +1,3 @@
 package de.interguess.javaflow.api.index;
 
-public class Index {
-}
+public sealed interface Index permits ExecutableIndex, TriggerIndex, WorkflowIndex {}

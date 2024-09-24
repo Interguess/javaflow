@@ -1,8 +1,6 @@
 package de.interguess.javaflow.api.exception;
 
-public class WorkflowLoadException extends RuntimeException {
+import lombok.experimental.StandardException;
 
-    public WorkflowLoadException(String message) {
-        super(message);
-    }
-}
+@StandardException
+public class WorkflowLoadException extends RuntimeException {}

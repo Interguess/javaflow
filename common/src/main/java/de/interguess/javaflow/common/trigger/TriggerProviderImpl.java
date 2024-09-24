@@ -57,12 +57,12 @@ public class TriggerProviderImpl extends TriggerProvider {
         }
 
         WorkflowProvider.getInstance().getWorkflows().forEach(workflowIndex -> {
-            workflowIndex.getTriggers().stream()
-                    .filter(triggerIndex -> triggerIndex.getType().equals(customTrigger.id()))
+            workflowIndex.triggers().stream()
+                    .filter(triggerIndex -> triggerIndex.type().equals(customTrigger.id()))
                     .forEach(triggerIndex -> {
                         final Workflow workflow = new WorkflowImpl();
 
-                        triggerIndex.getTasks().forEach(task -> {
+                        triggerIndex.tasks().forEach(task -> {
                             executeFunction(workflow, task);
                         });
                     });
@@ -72,10 +72,10 @@ public class TriggerProviderImpl extends TriggerProvider {
     private @Nullable MultiOutput executeFunction(@NotNull Workflow workflow, @NotNull ExecutableIndex index) {
         switch (index) {
             case LoopIndex loopIndex -> {
-                final ProcedureIndex condition = loopIndex.getCondition();
+                final ProcedureIndex condition = loopIndex.condition();
 
                 while (((boolean) executeFunction(workflow, condition).getValues().get("_result"))) {
-                    loopIndex.getTasks().forEach(task -> {
+                    loopIndex.tasks().forEach(task -> {
                         executeFunction(workflow, task);
                     });
                 }
@@ -84,15 +84,15 @@ public class TriggerProviderImpl extends TriggerProvider {
             }
 
             case ProcedureIndex procedureIndex -> {
-                Procedure procedure = ProcedureProvider.getInstance().getProcedureById(procedureIndex.getType());
+                Procedure procedure = ProcedureProvider.getInstance().getProcedureById(procedureIndex.type());
 
                 if (procedure == null) {
-                    throw new TriggerIndexingException("Procedure not found: " + procedureIndex.getType());
+                    throw new TriggerIndexingException("Procedure not found: " + procedureIndex.type());
                 }
 
                 final MultiInput input = MultiInput.create();
 
-                procedureIndex.getInput().getValues().forEach((key, value) -> {
+                procedureIndex.input().getValues().forEach((key, value) -> {
                     if (value instanceof String string) {
                         input.getValues().put(key, ReferenceResolver.resolve(workflow, string));
                     } else {
@@ -100,7 +100,7 @@ public class TriggerProviderImpl extends TriggerProvider {
                     }
                 });
 
-                final MultiOutput output = procedure.execute(workflow, procedureIndex.getInput());
+                final MultiOutput output = procedure.execute(workflow, procedureIndex.input());
 
                 if (output != null) {
                     final Map<String, Serializable> outputMap = GsonUtil.deepJsonToMap(new HashMap<>(), output.getValues());
@@ -116,26 +116,24 @@ public class TriggerProviderImpl extends TriggerProvider {
             }
 
             case RouterIndex routerIndex -> {
-                Object input = routerIndex.getInput();
+                Object input = routerIndex.input();
 
                 if (input instanceof String string) {
                     input = ReferenceResolver.resolve(workflow, string);
                 }
 
-                if (!routerIndex.getRoutes().containsKey(input)) {
+                if (!routerIndex.routes().containsKey(input)) {
                     throw new TriggerIndexingException("No route found for input: " + input);
                 }
 
-                routerIndex.getRoutes().get(input).forEach(task -> {
+                routerIndex.routes().get(input).forEach(task -> {
                     executeFunction(workflow, task);
                 });
 
                 return null;
             }
 
-            default -> {
-                throw new TriggerIndexingException("Unknown executable index type: " + index.getClass().getName());
-            }
+            default -> throw new TriggerIndexingException("Unknown executable index type: " + index.getClass().getName());
         }
     }
 }

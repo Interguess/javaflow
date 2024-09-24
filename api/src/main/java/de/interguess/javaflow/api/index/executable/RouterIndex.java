@@ -9,17 +9,10 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Map;
 
-@Getter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor(force = true)
-public class RouterIndex extends ExecutableIndex {
-
-    private final String id;
-
-    private final String type;
-
-    private final Map<Object, List<ExecutableIndex>> routes;
-
-    private final Object input;
-}
+public record RouterIndex(
+        String id,
+        String type,
+        Map<Object, List<ExecutableIndex>> routes,
+        Object input
+) implements ExecutableIndex {}
