@@ -1,5 +1,6 @@
 package de.interguess.javaflow.api.io;
 
+import lombok.Singular;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
