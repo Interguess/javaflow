@@ -1,4 +1,5 @@
 rootProject.name = 'javaflow'
 include 'api'
 include 'common'
+include 'toolkit'
 
