@@ -1,0 +1,17 @@
+name: Publish api package
+
+on:
+  workflow_run:
+    workflows: ["Create release"]
+    types:
+      - completed
+
+permissions:
+  contents: write
+
+jobs:
+  publish-api-package:
+    uses: EternalEmpires/java-ci/.github/workflows/publish-api-package.yml@main
+    secrets:
+      IGXSYS_REED_TOKEN: ${{ secrets.IGXSYS_REED_TOKEN }}
+      IGXSYS_REED_USER: ${{ secrets.IGXSYS_REED_USER }}

@@ -1,6 +1,80 @@
+import java.nio.file.Files
+
 plugins {
+    id 'checkstyle'
     id 'java'
+    id 'pmd'
 }
 
 group 'de.interguess'
-version '1.0-SNAPSHOT'
+version System.getenv("RELEASE_VERSION") != null ? System.getenv("RELEASE_VERSION") : "unknown"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.slf4j:slf4j-api:2.0.16'
+}
+
+allprojects {
+    repositories {
+        maven {
+            url 'https://repository.eternalempires.dev/private'
+
+            credentials {
+                username System.getenv('IGXSYS_REED_USER')
+                password System.getenv('IGXSYS_REED_TOKEN')
+            }
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+    }
+}
+
+checkstyle {
+    final var checkstyleFile = Files.createTempFile("JAVA_CHECKSTYLE", ".xml")
+    assert checkstyleFile != null: "Checkstyle file was not created successfully"
+
+    final var checkstyleXML = System.getenv("JAVA_CHECKSTYLE")
+
+    if (checkstyleXML == null) {
+        logger.info("Checkstyle XML environment variable was empty, skipping checkstyle...")
+    } else {
+        Files.writeString(checkstyleFile, checkstyleXML)
+
+        configFile checkstyleFile.toFile()
+    }
+}
+
+pmd {
+    consoleOutput true
+
+    ruleSets = ['rulesets/java/basic.xml', 'rulesets/java/design.xml']
+}
+
+def sourceDirs(String srcSet, String path = "java") {
+    return subprojects.collect { "${it.name}/src/${srcSet}/${path}" }
+            .findAll { file(it).exists() }
+}
+
+["checkstyleMain", "checkstyleTest", "pmdMain", "pmdTest"].each { taskName ->
+    def srcSet = taskName.toLowerCase().contains("test") ? "test" : "main"
+    tasks.named(taskName) {
+        source = sourceDirs(srcSet)
+    }
+}
+
+tasks.check {
+    dependsOn checkstyleMain, pmdMain
+}
+
+tasks.register("publish") {
+    dependsOn(":api:publish")
+}
+
+tasks.register("shadowJar") {
+    dependsOn(":paper:shadowJar")
+}
