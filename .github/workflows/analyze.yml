@@ -1,0 +1,16 @@
+name: Analyze codestyle
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+permissions:
+  checks: write
+  pull-requests: write
+  contents: write
+
+jobs:
+  check:
+    uses: EternalEmpires/java-ci/.github/workflows/analyze-codestyle.yml@main
