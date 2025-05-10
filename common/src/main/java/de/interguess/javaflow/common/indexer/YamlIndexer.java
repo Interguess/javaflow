@@ -46,7 +46,10 @@ public class YamlIndexer implements WorkflowIndexer {
         final List<TriggerIndex> triggers = new ArrayList<>();
 
         for (Object triggerElement : section.getList("triggers")) {
-            final ConfigurationSection triggerSection = new YamlConfiguration().createSection("section", (Map<?, ?>) triggerElement);
+            final ConfigurationSection triggerSection = new YamlConfiguration().createSection(
+                    "section",
+                    (Map<?, ?>) triggerElement
+            );
 
             triggers.add(indexTrigger(triggerSection));
         }
@@ -91,7 +94,9 @@ public class YamlIndexer implements WorkflowIndexer {
                     .input(inputObject)
                     .build();
         } else if (type.equals("loop")) {
-            final ProcedureIndex condition = (ProcedureIndex) indexExecutableElement(section.getConfigurationSection("condition")); //todo: throw exception if type mismatch
+            final ProcedureIndex condition = (ProcedureIndex) indexExecutableElement(
+                    section.getConfigurationSection("condition")
+            ); //todo: throw exception if type mismatch
 
             return LoopIndex.builder()
                     .id(id)

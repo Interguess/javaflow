@@ -103,7 +103,10 @@ public class TriggerProviderImpl extends TriggerProvider {
                 final MultiOutput output = procedure.execute(workflow, procedureIndex.input());
 
                 if (output != null) {
-                    final Map<String, Serializable> outputMap = GsonUtil.deepJsonToMap(new HashMap<>(), output.getValues());
+                    final Map<String, Serializable> outputMap = GsonUtil.deepJsonToMap(
+                            new HashMap<>(),
+                            output.getValues()
+                    );
 
                     for (Map.Entry<String, Serializable> entry : outputMap.entrySet()) {
                         workflow.setVariable(entry.getKey(), entry.getValue());
@@ -133,7 +136,9 @@ public class TriggerProviderImpl extends TriggerProvider {
                 return null;
             }
 
-            default -> throw new TriggerIndexingException("Unknown executable index type: " + index.getClass().getName());
+            default -> {
+                throw new TriggerIndexingException("Unknown executable index type: " + index.getClass().getName());
+            }
         }
     }
 }

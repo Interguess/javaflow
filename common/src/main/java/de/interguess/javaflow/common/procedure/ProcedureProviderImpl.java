@@ -32,7 +32,17 @@ public class ProcedureProviderImpl extends ProcedureProvider {
                     try {
                         final Constructor<?> constructor = clazz.getConstructor();
 
-                        indexes.put(clazz.getAnnotation(CustomProcedure.class).id(), (Procedure) constructor.newInstance());
+                        final CustomProcedure customProcedure = clazz.getAnnotation(CustomProcedure.class);
+
+                        if (customProcedure == null) {
+                            throw new IllegalStateException("CustomProcedure annotation not found on class " + clazz.getName());
+                        }
+
+                        if (!Procedure.class.isAssignableFrom(clazz)) {
+                            throw new IllegalStateException("Class " + clazz.getName() + " is not a subclass of Procedure");
+                        }
+
+                        indexes.put(customProcedure.id(), (Procedure) constructor.newInstance());
                     } catch (NoSuchMethodException | IllegalAccessException | InstantiationException |
                              InvocationTargetException e) {
                         throw new RuntimeException(e);

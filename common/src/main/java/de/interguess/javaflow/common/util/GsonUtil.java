@@ -14,7 +14,10 @@ public class GsonUtil {
 
     private static final Gson GSON = new Gson();
 
-    public static @NotNull Map<String, Serializable> deepJsonToMap(@NotNull Map<String, Serializable> map, @NotNull Object object) {
+    public static @NotNull Map<String, Serializable> deepJsonToMap(
+            @NotNull Map<String, Serializable> map,
+            @NotNull Object object
+    ) {
         final JsonObject jsonObject = GSON.toJsonTree(object).getAsJsonObject();
 
         for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
