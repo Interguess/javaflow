@@ -76,5 +76,5 @@ tasks.register("publish") {
 }
 
 tasks.register("shadowJar") {
-    dependsOn(":paper:shadowJar")
+
 }
