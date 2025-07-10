@@ -18,11 +18,11 @@ dependencies {
     implementation 'com.github.Carleslc.Simple-YAML:Simple-Yaml:1.8.4'
 
     compileOnly 'org.projectlombok:lombok:1.18.38'
-    compileOnly 'org.jetbrains:annotations:24.1.0'
+    compileOnly 'org.jetbrains:annotations:26.0.2'
 
     annotationProcessor 'org.projectlombok:lombok:1.18.38'
     
-    testCompileOnly 'org.jetbrains:annotations:24.1.0'
+    testCompileOnly 'org.jetbrains:annotations:26.0.2'
     testCompileOnly 'org.projectlombok:lombok:1.18.38'
 
     testImplementation platform('org.junit:junit-bom:5.11.0')
