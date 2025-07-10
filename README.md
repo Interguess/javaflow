@@ -2,6 +2,10 @@
 
 ![image](https://github.com/user-attachments/assets/200c2189-6bd3-4795-b02a-fdb32386329c)
 
+> [!WARNING]  
+> Javaflow is currently still under active development, we do not yet have a version that is fully operational and performant.<br>
+> You can use javaflow yourself to test it or support us in the development. There will still be some changes and whole structures can be revised.
+
 A robust Java framework specifically designed to efficiently execute a wide range of tasks based on different conditions or triggers, providing seamless integration with AI systems. It has an advanced, automated schema generation process that simplifies the configuration of complex workflows. This framework is ideal for projects that require dynamic decision making, machine learning capabilities and automation of intelligent processes in different environments.
 
 ## How to install
