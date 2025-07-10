@@ -25,7 +25,7 @@ dependencies {
     testCompileOnly 'org.jetbrains:annotations:24.1.0'
     testCompileOnly 'org.projectlombok:lombok:1.18.38'
 
-    testImplementation platform('org.junit:junit-bom:5.11.0')
+    testImplementation platform('org.junit:junit-bom:5.13.3')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.38'
