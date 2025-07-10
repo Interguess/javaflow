@@ -8,6 +8,6 @@ body:
     attributes:
       label: Describe your idea
       description: Please provide a raw or complete content of the feature
-      placeholder: A detailed description, possibly with examples or concept arts.
+      placeholder: A detailed description, possibly with examples or concept art.
     validations:
       required: true
