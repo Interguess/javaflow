@@ -17,7 +17,7 @@ public @interface CustomProcedure {
 
     @NotNull String shorthand();
 
-    @NotNull Field[] input();
+    @NotNull Field[] input() default {};
 
     @NotNull Field[] output() default {};
 
@@ -30,5 +30,14 @@ public @interface CustomProcedure {
         Class<?> type();
 
         boolean required() default false;
+
+        RegexValidation regex() default @RegexValidation(regex = "", errorMessage = "");
+    }
+
+    @interface RegexValidation {
+
+        String regex();
+
+        String errorMessage();
     }
 }

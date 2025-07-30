@@ -15,4 +15,10 @@ public record RouterIndex(
         String type,
         Map<Object, List<ExecutableIndex>> routes,
         Object input
-) implements ExecutableIndex {}
+) implements ExecutableIndex {
+
+    @Override
+    public String getId() {
+        return id;
+    }
+}

@@ -2,17 +2,15 @@ package de.interguess.javaflow.toolkit.procedure.variables;
 
 import de.interguess.javaflow.api.construct.procedure.CustomProcedure;
 import de.interguess.javaflow.api.construct.procedure.Procedure;
-import de.interguess.javaflow.api.io.MultiInput;
-import de.interguess.javaflow.api.io.MultiOutput;
+import de.interguess.javaflow.api.io.input.MultiInput;
+import de.interguess.javaflow.api.io.output.MultiOutput;
 import de.interguess.javaflow.api.workflow.Workflow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.Serializable;
-
 @CustomProcedure(
         id = "variables.set",
-        description = "Sets a variable",
+        description = "Sets or creates a variable",
         shorthand = "set %key% to %value%",
         input = {
                 @CustomProcedure.Field(
@@ -24,7 +22,7 @@ import java.io.Serializable;
                 @CustomProcedure.Field(
                         name = "value",
                         description = "The value of the variable",
-                        type = Serializable.class,
+                        type = Object.class,
                         required = true
                 )
         }
@@ -32,9 +30,9 @@ import java.io.Serializable;
 public class SetVariableProcedure implements Procedure {
 
     @Override
-    public @Nullable MultiOutput execute(@NotNull Workflow workflow, MultiInput input) {
-        final String name = input.required(String.class, "key");
-        final Serializable value = input.required(Serializable.class, "value");
+    public @Nullable MultiOutput execute(@NotNull Workflow workflow, @NotNull MultiInput input) {
+        final String name = input.required(workflow, String.class, "key");
+        final Object value = input.required(workflow, Object.class, "value");
 
         workflow.setVariable(name, value);
 

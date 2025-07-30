@@ -1,6 +1,6 @@
 package de.interguess.javaflow.api.construct.trigger;
 
-import de.interguess.javaflow.api.io.MultiInput;
+import de.interguess.javaflow.api.io.input.MultiInput;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;

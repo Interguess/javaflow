@@ -13,13 +13,11 @@ import java.util.List;
 public class ProcedureSchemaProvider implements SchemaProvider<Procedure> {
 
     @Override
-    public @NotNull String provideSchema(@NotNull List<Procedure> procedures) {
-        final JsonArray schema = new JsonArray();
-
-        procedures.forEach(function -> {
+    public @NotNull JsonArray provideSchema(@NotNull List<Procedure> procedures) {
+        return procedures.stream().map(procedure -> {
             final JsonObject procedureSchema = new JsonObject();
 
-            final CustomProcedure customProcedure = function.getClass().getAnnotation(CustomProcedure.class);
+            final CustomProcedure customProcedure = procedure.getClass().getAnnotation(CustomProcedure.class);
 
             if (customProcedure == null) {
                 throw new IllegalArgumentException("Procedure must be annotated with @CustomProcedure");
@@ -58,9 +56,7 @@ public class ProcedureSchemaProvider implements SchemaProvider<Procedure> {
                 procedureSchema.add("output", outputSchema);
             }
 
-            schema.add(procedureSchema);
-        });
-
-        return schema.toString();
+            return procedureSchema;
+        }).collect(JsonArray::new, JsonArray::add, JsonArray::addAll);
     }
 }

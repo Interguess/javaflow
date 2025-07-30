@@ -4,17 +4,29 @@ plugins {
 
 repositories {
     mavenCentral()
+
+    maven {
+        url 'https://jitpack.io'
+    }
 }
 
 dependencies {
     implementation project(':api')
+    implementation project(':common')
+    implementation 'it.unimi.dsi:fastutil:8.5.13'
 
     compileOnly 'org.jetbrains:annotations:24.0.0'
 
-    testImplementation platform('org.junit:junit-bom:5.10.0')
+    implementation 'com.google.inject:guice:7.0.0'
+    implementation 'com.google.code.gson:gson:2.8.9'
+
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
 test {
     useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
 }

@@ -2,6 +2,7 @@ package de.interguess.javaflow.common.util;
 
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.ClassPath;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
@@ -16,8 +17,9 @@ public class ClassSearcherUtil {
     @SuppressWarnings("UnstableApiUsage")
     public static List<Class<?>> listAllClasses(@NotNull ClassLoader classLoader, @NotNull String packageName) {
         try {
-            ClassPath classPath = ClassPath.from(classLoader);
-            ImmutableList<ClassPath.ClassInfo> classInfos = classPath.getTopLevelClassesRecursive(packageName).asList();
+            final ClassPath classPath = ClassPath.from(classLoader);
+
+            final ImmutableSet<ClassPath.ClassInfo> classInfos = classPath.getTopLevelClassesRecursive(packageName);
 
             return classInfos.stream()
                     .map(ClassPath.ClassInfo::load)

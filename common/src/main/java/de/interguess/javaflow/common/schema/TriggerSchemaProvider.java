@@ -1,6 +1,7 @@
 package de.interguess.javaflow.common.schema;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import de.interguess.javaflow.api.schema.SchemaProvider;
 import de.interguess.javaflow.api.construct.trigger.CustomTrigger;
@@ -13,13 +14,11 @@ import java.util.List;
 public class TriggerSchemaProvider implements SchemaProvider<Trigger> {
 
     @Override
-    public @NotNull String provideSchema(@NotNull List<Trigger> triggers) {
-        JsonArray schema = new JsonArray();
-
-        triggers.forEach(function -> {
+    public @NotNull JsonArray provideSchema(@NotNull List<Trigger> triggers) {
+        return triggers.stream().map(trigger -> {
             final JsonObject triggerSchema = new JsonObject();
 
-            final CustomTrigger customTrigger = function.getClass().getAnnotation(CustomTrigger.class);
+            final CustomTrigger customTrigger = trigger.getClass().getAnnotation(CustomTrigger.class);
 
             if (customTrigger == null) {
                 throw new IllegalArgumentException("Trigger must be annotated with @CustomTrigger");
@@ -42,9 +41,7 @@ public class TriggerSchemaProvider implements SchemaProvider<Trigger> {
 
             triggerSchema.add("input", inputSchema);
 
-            schema.add(triggerSchema);
-        });
-
-        return schema.toString();
+            return triggerSchema;
+        }).collect(JsonArray::new, JsonArray::add, JsonArray::addAll);
     }
 }

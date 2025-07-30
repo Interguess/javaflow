@@ -1,0 +1,35 @@
+
+name: increment-to-5
+triggers:
+  - id: b3f6c8d1
+    type: command
+    command: test
+    tasks:
+      - id: loop
+        type: loop
+        condition:
+          - id: less-or-equal
+            type: number.lessOrEqual
+            input:
+              number: "${ b3f6c8d1.value }"
+              other: 300000
+          - id: set-result
+            type: variables.set
+            input:
+              key: _result
+              value: "${ less-or-equal.lessOrEqual }"
+        tasks:
+          - id: increment
+            type: number.increment
+            input:
+              number: "${ b3f6c8d1.value }"
+              value: 1
+          - id: set-next
+            type: variables.set
+            input:
+              key: b3f6c8d1.value
+              value: "${ increment.incremented }"
+      - id: done
+        type: console.print
+        input:
+          message: "Fertig!"

@@ -5,21 +5,20 @@ import de.interguess.javaflow.api.construct.procedure.CustomProcedure;
 import de.interguess.javaflow.api.construct.procedure.Procedure;
 import de.interguess.javaflow.api.construct.procedure.ProcedureProvider;
 import de.interguess.javaflow.common.util.ClassSearcherUtil;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Singleton
 public class ProcedureProviderImpl extends ProcedureProvider {
 
-    private final Map<String, Procedure> indexes;
+    private final Object2ObjectOpenHashMap<String, Procedure> indexes;
 
     public ProcedureProviderImpl() {
-        this.indexes = new HashMap<>();
+        this.indexes = new Object2ObjectOpenHashMap<>();
 
         ProcedureProvider.setInstance(this);
     }

@@ -7,17 +7,14 @@ import de.interguess.javaflow.api.index.executable.LoopIndex;
 import de.interguess.javaflow.api.index.executable.ProcedureIndex;
 import de.interguess.javaflow.api.index.executable.RouterIndex;
 import de.interguess.javaflow.api.indexer.WorkflowIndexer;
-import de.interguess.javaflow.api.io.MultiInput;
-import de.interguess.javaflow.common.util.NullUtil;
+import de.interguess.javaflow.api.io.input.Inputs;
+import de.interguess.javaflow.api.io.input.MultiInput;
 import org.jetbrains.annotations.NotNull;
 import org.simpleyaml.configuration.ConfigurationSection;
 import org.simpleyaml.configuration.file.YamlConfiguration;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class YamlIndexer implements WorkflowIndexer {
 
@@ -31,7 +28,7 @@ public class YamlIndexer implements WorkflowIndexer {
     }
 
     private WorkflowIndex indexWorkflow(ConfigurationSection section) {
-        final String name = NullUtil.defaultIfNull(section.getString("name"), "Unnamed Workflow");
+        final String name = Objects.requireNonNullElse(section.getString("name"), "Unnamed Workflow");
 
         final Map<String, Object> variables = new HashMap<>();
 
@@ -78,6 +75,10 @@ public class YamlIndexer implements WorkflowIndexer {
 
             final ConfigurationSection routesSection = section.getConfigurationSection("routes");
 
+            if (routesSection == null) {
+                throw new IllegalArgumentException("Router routes section is missing");
+            }
+
             for (final String key : routesSection.getKeys(false)) {
                 routes.put(key, indexExecutableIndexList(routesSection, key));
             }
@@ -91,16 +92,32 @@ public class YamlIndexer implements WorkflowIndexer {
                     .input(inputObject)
                     .build();
         } else if (type.equals("loop")) {
-            final ProcedureIndex condition = (ProcedureIndex) indexExecutableElement(section.getConfigurationSection("condition")); //todo: throw exception if type mismatch
+            final List<Map<String, Object>> conditionSection = (List<Map<String, Object>>) section.getList("condition");
+
+            if (conditionSection == null) {
+                throw new IllegalArgumentException("Loop condition section is missing");
+            }
+
+            final List<ProcedureIndex> conditions = new ArrayList<>();
+
+            for(Map<String, Object> condition : conditionSection) {
+                final ProcedureIndex procedureIndex = (ProcedureIndex) indexExecutableElement(new YamlConfiguration().createSection("section", condition));
+
+                conditions.add(procedureIndex);
+            }
+
+            if (conditions.isEmpty()) {
+                throw new IllegalArgumentException("Loop conditions cannot be empty");
+            }
 
             return LoopIndex.builder()
                     .id(id)
                     .type(type)
-                    .condition(condition)
+                    .condition(conditions.toArray(new ProcedureIndex[0]))
                     .tasks(indexExecutableIndexList(section, "tasks"))
                     .build();
         } else {
-            final MultiInput.Builder input = MultiInput.create();
+            final MultiInput.Builder input = Inputs.getInstance().create();
 
             final ConfigurationSection inputSection = section.getConfigurationSection("input");
 
@@ -111,7 +128,7 @@ public class YamlIndexer implements WorkflowIndexer {
             return ProcedureIndex.builder()
                     .id(id)
                     .type(type)
-                    .input(input)
+                    .input(input.build())
                     .build();
         }
     }

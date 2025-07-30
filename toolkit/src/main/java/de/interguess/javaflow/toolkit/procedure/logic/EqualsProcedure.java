@@ -2,8 +2,9 @@ package de.interguess.javaflow.toolkit.procedure.logic;
 
 import de.interguess.javaflow.api.construct.procedure.CustomProcedure;
 import de.interguess.javaflow.api.construct.procedure.Procedure;
-import de.interguess.javaflow.api.io.MultiInput;
-import de.interguess.javaflow.api.io.MultiOutput;
+import de.interguess.javaflow.api.io.input.MultiInput;
+import de.interguess.javaflow.api.io.output.MultiOutput;
+import de.interguess.javaflow.api.io.output.Outputs;
 import de.interguess.javaflow.api.workflow.Workflow;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,11 +37,11 @@ import org.jetbrains.annotations.NotNull;
 public class EqualsProcedure implements Procedure {
 
     @Override
-    public @NotNull MultiOutput execute(@NotNull Workflow workflow, MultiInput input) {
-        final Object first = input.required(Object.class, "first");
-        final Object second = input.required(Object.class, "second");
+    public @NotNull MultiOutput execute(@NotNull Workflow workflow, @NotNull MultiInput input) {
+        final Object first = input.required(workflow, Object.class, "first");
+        final Object second = input.required(workflow, Object.class, "second");
 
-        return MultiOutput.create()
+        return Outputs.getInstance().create()
                 .with("equals", first.equals(second));
     }
 }

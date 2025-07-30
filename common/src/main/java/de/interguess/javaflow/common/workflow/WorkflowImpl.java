@@ -1,6 +1,5 @@
 package de.interguess.javaflow.common.workflow;
 
-import de.interguess.javaflow.api.index.WorkflowIndex;
 import de.interguess.javaflow.api.workflow.Workflow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +24,13 @@ public class WorkflowImpl implements Workflow {
 
     @Override
     public @Nullable Object getVariable(@NotNull String key) {
-        return variables.get(key);
+        final Object value = variables.get(key);
+
+        if (value == null) {
+            throw new IllegalArgumentException("Variable '" + key + "' does not exist in the workflow.");
+        }
+
+        return value;
     }
 
     @Override

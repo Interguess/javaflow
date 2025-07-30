@@ -12,22 +12,27 @@ repositories {
 
 dependencies {
     implementation project(':api')
+
     implementation 'com.google.inject:guice:7.0.0'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'com.github.Carleslc.Simple-YAML:Simple-Yaml:1.8.4'
+    implementation 'it.unimi.dsi:fastutil:8.5.13'
 
     compileOnly 'org.projectlombok:lombok:1.18.34'
     compileOnly 'org.jetbrains:annotations:24.1.0'
 
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
-    
+
+    testImplementation platform('org.junit:junit-bom:5.11.0')
+
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.mockito:mockito-core:5.5.0'
+
     testCompileOnly 'org.jetbrains:annotations:24.1.0'
     testCompileOnly 'org.projectlombok:lombok:1.18.34'
 
-    testImplementation platform('org.junit:junit-bom:5.11.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
+
 }
 
 test {

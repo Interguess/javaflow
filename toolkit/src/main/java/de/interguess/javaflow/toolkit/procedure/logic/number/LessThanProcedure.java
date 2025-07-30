@@ -2,8 +2,9 @@ package de.interguess.javaflow.toolkit.procedure.logic.number;
 
 import de.interguess.javaflow.api.construct.procedure.CustomProcedure;
 import de.interguess.javaflow.api.construct.procedure.Procedure;
-import de.interguess.javaflow.api.io.MultiInput;
-import de.interguess.javaflow.api.io.MultiOutput;
+import de.interguess.javaflow.api.io.input.MultiInput;
+import de.interguess.javaflow.api.io.output.MultiOutput;
+import de.interguess.javaflow.api.io.output.Outputs;
 import de.interguess.javaflow.api.workflow.Workflow;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,11 +37,11 @@ import org.jetbrains.annotations.NotNull;
 public class LessThanProcedure implements Procedure {
 
     @Override
-    public @NotNull MultiOutput execute(@NotNull Workflow workflow, MultiInput input) {
-        final Number number = input.required(Number.class, "number");
-        final Number other = input.required(Number.class, "other");
+    public @NotNull MultiOutput execute(@NotNull Workflow workflow, @NotNull MultiInput input) {
+        final Number number = input.required(workflow, Number.class, "number");
+        final Number other = input.required(workflow, Number.class, "other");
 
-        return MultiOutput.create()
+        return Outputs.getInstance().create()
                 .with("less", number.doubleValue() < other.doubleValue());
     }
 }

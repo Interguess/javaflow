@@ -1,0 +1,92 @@
+{
+  "name": "test-command",
+  "triggers": [
+    {
+      "id": "b3f6c8d1",
+      "type": "command",
+      "command": "test",
+      "tasks": [
+        {
+          "id": "my-loop",
+          "type": "loop",
+          "condition": [
+            {
+              "id": "decrement-number",
+              "type": "number.decrement",
+              "input": {
+                "number": "${ b3f6c8d1.value }",
+                "value": 1
+              }
+            },
+            {
+              "id": "greater-than-zero",
+              "type": "number.greaterOrEqual",
+              "input": {
+                "number": "${ decrement-number.decremented }",
+                "other": 0
+              }
+            },
+            {
+              "id": "set-variable",
+              "type": "variables.set",
+              "input": {
+                "key": "_result",
+                "value": "${ greater-than-zero.greaterOrEqual }"
+              }
+            },
+            {
+              "id": "set-variable",
+              "type": "variables.set",
+              "input": {
+                "key": "b3f6c8d1.value",
+                "value": "${ decrement-number.decremented }"
+              }
+            }
+          ],
+          "tasks": [
+            {
+              "id": "a2b3c4d5",
+              "type": "console.print",
+              "input": {
+                "message": "Die Zahl ist: ${ b3f6c8d1.value }"
+              }
+            }
+          ]
+        },
+        {
+          "id": "c7a2b4e9",
+          "type": "number.greaterThan",
+          "input": {
+            "number": "${ b3f6c8d1.value }",
+            "other": 10
+          }
+        },
+        {
+          "id": "d9f1e8a3",
+          "type": "router",
+          "input": "${ c7a2b4e9.greater }",
+          "routes": {
+            "true": [
+              {
+                "id": "a1b2c3d4",
+                "type": "console.print",
+                "input": {
+                  "message": "Ist groeßer als 10"
+                }
+              }
+            ],
+            "false": [
+              {
+                "id": "e5f6g7h8",
+                "type": "console.print",
+                "input": {
+                  "message": "Ist zu klein"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
